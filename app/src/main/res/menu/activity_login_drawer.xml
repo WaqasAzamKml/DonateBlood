@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/nav_profile" />
+        <item
+            android:id="@+id/nav_request_donation"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/nav_request_donation" />
+        <item
+            android:id="@+id/nav_volunteers_list"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/nav_volunteers_list" />
+        <item
+            android:id="@+id/nav_view_donation_requests"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/nav_view_requests" />
+        <item
+            android:id="@+id/nav_featured_donors"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/nav_featured_donors" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_blood_banks"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/nav_blood_banks" />
+            <item
+                android:id="@+id/nav_emergency_numbers"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/nav_emergency_numbers" />
+        </menu>
+    </item>
+
+</menu>

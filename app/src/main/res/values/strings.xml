@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">Donate Blood</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_login">Login</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_signup">Signup</string>
+
+    <string name="hint_email">Enter Email</string>
+    <string name="hint_password">Enter Password</string>
+    <string name="hint_repeat_password">Repeat Password</string>
+    <string name="hint_name">Enter Name</string>
+    <string name="hint_gender">Select Gender</string>
+    <string name="hint_age">Enter Age (min 18)</string>
+    <string name="hint_blood_group">Select Blood Group</string>
+    <string name="hint_phone">Enter Phone Number</string>
+    <string name="hint_city">Select City</string>
+
+    <string name="txt_forgotPassword">Forgot Password?</string>
+    <string name="txt_already_registered">Already registered? Login Below.</string>
+    <string name="txt_donation_completed">Donation Completed? Thank the person.</string>
+    <string name="txt_required_blood">Required Blood Group ?</string>
+    <string name="txt_donation_requests">Pending Donation Requests</string>
+    <string name="txt_volunteers_list">List of Volunteers</string>
+    <string name="txt_featured_donors">Featured Donors</string>
+
+    <string name="txt_login">Login</string>
+    <string name="txt_signup">Signup</string>
+    <string name="txt_edit_profile">Edit Profile</string>
+    <string name="txt_donate">Donate</string>
+    <string name="txt_thanks">Thanks</string>
+
+    <string name="temp_profile_name">Muhammad Hashim</string>
+    <string name="temp_name">Hashim</string>
+    <string name="temp_age">35</string>
+    <string name="temp_phone_number">03333333333</string>
+    <string name="temp_address">University of Agriculture, Faisalabad.</string>
+    <string name="temp_message">I need blood in next 4 hours.</string>
+    <string name="temp_request_donation">Request Donation</string>
+    <string name="temp_view_requests">View Donation Requests</string>
+    <string name="temp_date">01-Sep-2016</string>
+    <string name="temp_city">Faisalabad</string>
+
+    <string name="blood_a"> A+ve</string>
+    <string name="blood_aN"> A-ve</string>
+    <string name="blood_b"> B+ve</string>
+    <string name="blood_bN"> B-ve</string>
+    <string name="blood_ab"> AB+ve</string>
+    <string name="blood_abN"> AB-ve</string>
+    <string name="blood_o"> O+ve</string>
+    <string name="blood_oN"> O-ve</string>
+
+    <string name="heading_blood_group"><b>Group</b></string>
+    <string name="heading_date"><b>Date</b></string>
+    <string name="heading_city"><b>City</b></string>
+    <string name="heading_name"><b>Name</b></string>
+    <string name="heading_age"><b>Age</b></string>
+    <string name="heading_view"><b>View</b></string>
+    <string name="heading_thanks"><b>Thanks</b></string>
+
+    <string name="nav_profile">Profile</string>
+    <string name="nav_request_donation">Request Donation</string>
+    <string name="nav_volunteers_list">Volunteers List</string>
+    <string name="nav_view_requests">View Requests</string>
+    <string name="nav_featured_donors">Featured Donors</string>
+    <string name="nav_blood_banks">Blood Banks</string>
+    <string name="nav_emergency_numbers">Emergency Numbers</string>
+
+
+</resources>

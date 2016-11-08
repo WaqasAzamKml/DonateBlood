@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (id == R.id.action_logout){
             sessionManager.logoutUser();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -99,15 +100,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new ProfileFragment()).commit();
+            sessionManager.checkLogin();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new ProfileFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_request_donation) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new BloodGroupFragment()).commit();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new BloodGroupFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_volunteers_list) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new VolunteersListFragment()).commit();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new VolunteersListFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_view_donation_requests) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new DonationRequestsFragment()).commit();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new DonationRequestsFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_featured_donors) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new FeaturedDonorsFragment()).commit();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new FeaturedDonorsFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_blood_banks) {
 
         } else if (id == R.id.nav_emergency_numbers) {

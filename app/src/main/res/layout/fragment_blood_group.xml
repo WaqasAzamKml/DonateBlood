@@ -38,6 +38,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnAPositive"
                     android:text="@string/blood_a"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -46,6 +47,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnANegative"
                     android:text="@string/blood_aN"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -62,6 +64,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnBPositive"
                     android:text="@string/blood_b"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -70,6 +73,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnBNegative"
                     android:text="@string/blood_bN"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -86,6 +90,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnOPositive"
                     android:text="@string/blood_o"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -94,6 +99,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnONegative"
                     android:text="@string/blood_oN"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -110,6 +116,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnABPositive"
                     android:text="@string/blood_ab"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"
@@ -118,6 +125,7 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnABNegative"
                     android:text="@string/blood_abN"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/tint"

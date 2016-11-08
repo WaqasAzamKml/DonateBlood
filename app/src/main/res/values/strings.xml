@@ -69,5 +69,7 @@
     <string name="nav_blood_banks">Blood Banks</string>
     <string name="nav_emergency_numbers">Emergency Numbers</string>
 
+    <string name="custom_message_hint">Enter custom message or leave it blank.</string>
+
 
 </resources>

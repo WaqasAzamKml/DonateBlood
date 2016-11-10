@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class BloodGroupFragment extends Fragment {
     SessionManager sessionManager;
-    Button btnAPostivie, btnANegative, btnBPostivie, btnBNegative,btnOPostivie, btnONegative,btnABPostivie, btnABNegative;
+    Button btnAPositive, btnANegative, btnBPositive, btnBNegative,btnOPositive, btnONegative,btnABPositive, btnABNegative;
     android.app.FragmentManager fragmentManager;
 
     @Override
@@ -32,16 +32,16 @@ public class BloodGroupFragment extends Fragment {
 
             fragmentManager = getFragmentManager();
 
-            btnAPostivie = (Button) v.findViewById(R.id.btnAPositive);
+            btnAPositive = (Button) v.findViewById(R.id.btnAPositive);
             btnANegative = (Button) v.findViewById(R.id.btnANegative);
-            btnBPostivie = (Button) v.findViewById(R.id.btnBPositive);
+            btnBPositive = (Button) v.findViewById(R.id.btnBPositive);
             btnBNegative = (Button) v.findViewById(R.id.btnBNegative);
-            btnOPostivie = (Button) v.findViewById(R.id.btnOPositive);
+            btnOPositive = (Button) v.findViewById(R.id.btnOPositive);
             btnONegative = (Button) v.findViewById(R.id.btnONegative);
-            btnABPostivie = (Button) v.findViewById(R.id.btnABPositive);
+            btnABPositive = (Button) v.findViewById(R.id.btnABPositive);
             btnABNegative = (Button) v.findViewById(R.id.btnABNegative);
 
-            btnAPostivie.setOnClickListener(new View.OnClickListener() {
+            btnAPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showMessageDialog();
@@ -53,7 +53,7 @@ public class BloodGroupFragment extends Fragment {
                     showMessageDialog();
                 }
             });
-            btnBPostivie.setOnClickListener(new View.OnClickListener() {
+            btnBPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showMessageDialog();
@@ -65,7 +65,7 @@ public class BloodGroupFragment extends Fragment {
                     showMessageDialog();
                 }
             });
-            btnOPostivie.setOnClickListener(new View.OnClickListener() {
+            btnOPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showMessageDialog();
@@ -77,7 +77,7 @@ public class BloodGroupFragment extends Fragment {
                     showMessageDialog();
                 }
             });
-            btnABPostivie.setOnClickListener(new View.OnClickListener() {
+            btnABPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showMessageDialog();

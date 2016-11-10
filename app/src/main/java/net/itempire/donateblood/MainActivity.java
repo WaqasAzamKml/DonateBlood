@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (id == R.id.action_logout){
             sessionManager.logoutUser();
+            MainActivity.this.finish();
             return true;
         }
 

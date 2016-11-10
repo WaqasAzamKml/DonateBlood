@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),SignupActivity.class);
                 startActivity(i);
+                LoginActivity.this.finish();
             }
         });
 
@@ -211,15 +212,16 @@ public class LoginActivity extends AppCompatActivity
             String type = params[0];
             //String login_url = "http://192.168.8.105/android/";
             //String login_url = "http://172.18.15.82/android/";
-            String login_url = "http://waqasazam.com/android/";
+            //String login_url = "http://waqasazam.com/android/";
             //String login_url = "http://10.1.1.10/bloodapp/index.php?display=";
+            String login_url = "http://bloodapp.witorbit.net/index.php?display=";
 
             if(type.equals("login")){
                 String email = params[1];
                 String password = params[2];
                 try {
-                    //URL url = new URL(login_url+"m_loginactivity");
-                    URL url = new URL(login_url+"login.php");
+                    URL url = new URL(login_url+"m_loginactivity");
+                    //URL url = new URL(login_url+"login.php");
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");
@@ -230,7 +232,8 @@ public class LoginActivity extends AppCompatActivity
 
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
 
-                    String post_data = URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
+                    String post_data = URLEncoder.encode(type,"UTF-8")+"&"+
+                            URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
                             URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(password,"UTF-8");
 
                     bufferedWriter.write(post_data);
@@ -271,51 +274,52 @@ public class LoginActivity extends AppCompatActivity
 
         @Override
         protected void onPostExecute(String result) {
-            if(!result.equals("Error")){
-                String name, gender, age, bloodGroup, phoneNumber, city, email, password, thanks;
-                try {
-                    JSONObject userDetails = new JSONObject(result);
-                    Log.v("JSON Object",userDetails.getString("phoneNumber"));
-                    name = userDetails.getString("name");
-                    gender = userDetails.getString("gender");
-                    age = userDetails.getString("age");
-                    bloodGroup = userDetails.getString("bloodGroup");
-                    phoneNumber = userDetails.getString("phoneNumber");
-                    city = userDetails.getString("city");
-                    email = userDetails.getString("email");
-                    password = userDetails.getString("password");
-                    thanks = userDetails.getString("thanks");
-                    sessionManager.createLoginSession(name, gender, age, bloodGroup, phoneNumber, city, email, password, thanks);
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-//            if(!result.equals("null") && !result.equals("inactive")){
-//                String full_name, gender, age, blood_group, contact_no, city, email, password, thanks;
+//            if(!result.equals("Error")){
+//                String name, gender, age, bloodGroup, phoneNumber, city, email, password, thanks;
 //                try {
-//                    JSONArray jsonArray = new JSONArray(result);
-//                    JSONObject userDetails = jsonArray.getJSONObject(0);
-//
-//                    full_name = userDetails.getString("full_name");
+//                    JSONObject userDetails = new JSONObject(result);
+//                    Log.v("JSON Object",userDetails.getString("phoneNumber"));
+//                    name = userDetails.getString("name");
 //                    gender = userDetails.getString("gender");
 //                    age = userDetails.getString("age");
-//                    blood_group = userDetails.getString("blood_group");
-//                    contact_no = userDetails.getString("contact_no");
+//                    bloodGroup = userDetails.getString("bloodGroup");
+//                    phoneNumber = userDetails.getString("phoneNumber");
 //                    city = userDetails.getString("city");
 //                    email = userDetails.getString("email");
 //                    password = userDetails.getString("password");
 //                    thanks = userDetails.getString("thanks");
-//                    sessionManager.createLoginSession(full_name, gender, age, blood_group, contact_no, city, email, password, thanks);
+//                    sessionManager.createLoginSession(name, gender, age, bloodGroup, phoneNumber, city, email, password, thanks);
 //                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
 //                    startActivity(i);
+//                    LoginActivity.this.finish();
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
 //            }
+            if(!result.equals("null") && !result.equals("inactive") && !result.equals("Request Not found.")){
+                String full_name, gender, age, blood_group, contact_no, city, email, password, thanks;
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    JSONObject userDetails = jsonArray.getJSONObject(0);
+
+                    full_name = userDetails.getString("full_name");
+                    gender = userDetails.getString("gender");
+                    age = userDetails.getString("age");
+                    blood_group = userDetails.getString("blood_group");
+                    contact_no = userDetails.getString("contact_no");
+                    city = userDetails.getString("city");
+                    email = userDetails.getString("email");
+                    password = userDetails.getString("password");
+                    thanks = userDetails.getString("thanks");
+                    sessionManager.createLoginSession(full_name, gender, age, blood_group, contact_no, city, email, password, thanks);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                    LoginActivity.this.finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
             else{
-                Toast.makeText(LoginActivity.this, "Wrong Credentials. Try Again", Toast.LENGTH_SHORT).show();
             }
 //            alertDialog.setMessage(result);
 //            alertDialog.show();

@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +20,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -37,6 +45,7 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
     Spinner spnBloodGroup;
     Spinner spnCity;
     Button btnLogin, btnSignup;
+    SessionManager sessionManager;
 
     String[] genderArray    = {"Male","Female"};
     String[] bGroupArray    = {"A+ve","A-ve","B+ve","B-ve","AB+ve","AB-ve","O+ve","O-ve"};
@@ -74,6 +83,8 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
         btnLogin            = (Button) findViewById(R.id.btnLogin);
         btnSignup           = (Button) findViewById(R.id.btnSignup);
 
+        sessionManager = new SessionManager(getApplicationContext());
+
         ArrayAdapter<String> genderAdapter =
                 new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,genderArray);
         spnGender.setAdapter(genderAdapter);
@@ -104,31 +115,39 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),LoginActivity.class);
                 startActivity(i);
+                SignupActivity.this.finish();
             }
         });
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String name             = etName.getText().toString();
-//                String gender           = spnGender.getSelectedItem().toString();
-//                String age              = etAge.getText().toString();
-//                String bloodGroup       = spnBloodGroup.getSelectedItem().toString();
-//                String phoneNumber      = etPhone.getText().toString();
-//                String city             = spnCity.getSelectedItem().toString();
-//                String email            = etEmail.getText().toString();
-//                String password         = etPassword.getText().toString();
-//                String repeatPassword   = etRepeatPassword.getText().toString();
-//                String type             = "register";
-//
-//                if(!password.equals(repeatPassword)){
-//                    Toast.makeText(SignupActivity.this, "Passwords don't match!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                BackgroundWorker backgroundWorker = new BackgroundWorker(SignupActivity.this);
-//                backgroundWorker.execute(type, name, gender, age, bloodGroup, phoneNumber, city, email, password);
-//                finish();
+                String name             = etName.getText().toString();
+                String gender           = spnGender.getSelectedItem().toString();
+                String age              = etAge.getText().toString();
+                String bloodGroup       = spnBloodGroup.getSelectedItem().toString();
+                String phoneNumber      = etPhone.getText().toString();
+                String city             = spnCity.getSelectedItem().toString();
+                String email            = etEmail.getText().toString();
+                String password         = etPassword.getText().toString();
+                String repeatPassword   = etRepeatPassword.getText().toString();
+                String type             = "signup";
+
+                if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(age) && !TextUtils.isEmpty(phoneNumber)
+                        && !TextUtils.isEmpty(email)  && !TextUtils.isEmpty(password)  && !TextUtils.isEmpty(repeatPassword)){
+                    if(!password.equals(repeatPassword)){
+                        Toast.makeText(SignupActivity.this, "Passwords don't match!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(SignupActivity.this);
+                    backgroundWorker.execute(type, name, gender, age, bloodGroup, phoneNumber, city, email, password);
+                }
+                else{
+                    Toast.makeText(SignupActivity.this, "Fill in all the fields.", Toast.LENGTH_SHORT).show();
+                }
+
+
+
             }
         });
     }
@@ -212,9 +231,10 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
             //String login_url = "http://192.168.8.105/android/";
             //String login_url = "http://172.18.15.82/android/";
             //String login_url = "http://waqasazam.com/android/";
-            String login_url = "http://10.1.1.10/bloodapp/index.php?display=";
+            //String login_url = "http://10.1.1.10/bloodapp/index.php?display=";
+            String login_url = "http://bloodapp.witorbit.net/index.php?display=";
 
-            if(type.equals("register")){
+            if(type.equals("signup")){
                 String name             = params[1];
                 String gender           = params[2];
                 String age              = params[3];
@@ -225,22 +245,23 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
                 String password         = params[8];
                 try {
 
-                    URL url = new URL(login_url+"register.php");
+                    //URL url = new URL(login_url+"register.php");
+                    URL url = new URL(login_url+"m_signupactivity");
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");
                     httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoInput(true);
 
                     OutputStream outputStream = httpURLConnection.getOutputStream();
 
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
 
-                    String post_data = URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
+                    String post_data =URLEncoder.encode(type,"UTF-8")+"&"+
+                            URLEncoder.encode("full_name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
                             URLEncoder.encode("gender","UTF-8")+"="+URLEncoder.encode(gender,"UTF-8")+"&"+
                             URLEncoder.encode("age","UTF-8")+"="+URLEncoder.encode(age,"UTF-8")+"&"+
-                            URLEncoder.encode("bloodGroup","UTF-8")+"="+URLEncoder.encode(bloodGroup,"UTF-8")+"&"+
-                            URLEncoder.encode("phoneNumber","UTF-8")+"="+URLEncoder.encode(phoneNumber,"UTF-8")+"&"+
+                            URLEncoder.encode("blood_group","UTF-8")+"="+URLEncoder.encode(bloodGroup,"UTF-8")+"&"+
+                            URLEncoder.encode("phone","UTF-8")+"="+URLEncoder.encode(phoneNumber,"UTF-8")+"&"+
                             URLEncoder.encode("city","UTF-8")+"="+URLEncoder.encode(city,"UTF-8")+"&"+
                             URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
                             URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(password,"UTF-8");
@@ -250,21 +271,33 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
                     bufferedWriter.close();
                     outputStream.close();
 
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    inputStream.close();
-//
-//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-//
-//                String result = "";
-//                String line = "";
-//                while((line = bufferedReader.readLine())!=null){
-//                    result += line;
-//                }
-//
-//                bufferedReader.close();
-//                httpURLConnection.disconnect();
+                    String result = "";
 
-                    return "Registration Successful";
+                    InputStream inputStream = httpURLConnection.getInputStream();
+
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+
+                    String line = "";
+                    while((line = bufferedReader.readLine())!=null){
+                        result += line;
+                    }
+
+                    bufferedReader.close();
+                    inputStream.close();
+
+//                    int responseCode=httpURLConnection.getResponseCode();
+//
+//                    if (responseCode == HttpURLConnection.HTTP_OK) {
+//                        BufferedReader br=new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+//                        result = br.readLine();
+//                    }
+//                    else {
+//                        result="Error Registering";
+//                    }
+
+                    httpURLConnection.disconnect();
+
+                    return result;
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -277,14 +310,46 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
 
         @Override
         protected void onPreExecute() {
-            alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setTitle("Login Status");
+//            alertDialog = new AlertDialog.Builder(context).create();
+//            alertDialog.setTitle("Status");
+
         }
 
         @Override
         protected void onPostExecute(String result) {
-            alertDialog.setMessage(result);
-            alertDialog.show();
+
+            if(!result.equals("exists") && !result.equals("Request Not found.")){
+                String full_name, gender, age, blood_group, contact_no, city, email, password, thanks;
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    JSONObject userDetails = jsonArray.getJSONObject(0);
+
+                    full_name = userDetails.getString("full_name");
+                    gender = userDetails.getString("gender");
+                    age = userDetails.getString("age");
+                    blood_group = userDetails.getString("blood_group");
+                    contact_no = userDetails.getString("contact_no");
+                    city = userDetails.getString("city");
+                    email = userDetails.getString("email");
+                    password = userDetails.getString("password");
+                    thanks = userDetails.getString("thanks");
+                    sessionManager.createLoginSession(full_name, gender, age, blood_group, contact_no, city, email, password, thanks);
+                    Toast.makeText(SignupActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                    SignupActivity.this.finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (result.equals("exists")){
+                Toast.makeText(SignupActivity.this, "Email already exists. Try new Email.", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(SignupActivity.this, "Wrong Credentials. Try Again", Toast.LENGTH_SHORT).show();
+            }
+//            alertDialog.setMessage(result);
+//            alertDialog.show();
         }
 
         @Override

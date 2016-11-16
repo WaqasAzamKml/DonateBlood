@@ -42,6 +42,7 @@ public class SessionManager {
     private static final String IS_TEMP_LOGIN = "IsLoggedIn";
 
 
+    public static final String KEY_USER_ID = "user_id";
     public static final String KEY_NAME = "full_name";
     public static final String KEY_GENDER = "gender";
     public static final String KEY_AGE = "age";
@@ -51,6 +52,8 @@ public class SessionManager {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_THANKS = "thanks";
+    public static final String KEY_LAST_DONATION = "last_donation_data";
+    public static final String KEY_REG_DATE = "reg_date";
     private String username;
 
 
@@ -86,11 +89,14 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String gender, String age, String bloodGroup, String phoneNumber, String city, String email, String password, String thanks){
+    public void createLoginSession(String user_id, String name, String gender, String age,
+                                   String bloodGroup, String phoneNumber, String city, String email,
+                                   String password, String thanks, String last_donation_data, String reg_date){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
         editor.putBoolean(IS_TEMP_LOGIN, true);
 
+        editor.putString(KEY_USER_ID, user_id);
         editor.putString(KEY_NAME, name);
         editor.putString(KEY_GENDER, gender);
         editor.putString(KEY_AGE, age);
@@ -100,6 +106,8 @@ public class SessionManager {
         editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_PASSWORD, password);
         editor.putString(KEY_THANKS, thanks);
+        editor.putString(KEY_LAST_DONATION, last_donation_data);
+        editor.putString(KEY_REG_DATE, reg_date);
 
 
         // commit changes
@@ -177,6 +185,7 @@ public class SessionManager {
     public HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
         // user name
+        user.put(KEY_USER_ID, pref.getString(KEY_USER_ID, null));
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
         user.put(KEY_GENDER, pref.getString(KEY_GENDER, null));
         user.put(KEY_AGE, pref.getString(KEY_AGE, null));
@@ -186,6 +195,8 @@ public class SessionManager {
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
         user.put(KEY_THANKS, pref.getString(KEY_THANKS, null));
+        user.put(KEY_LAST_DONATION, pref.getString(KEY_LAST_DONATION, null));
+        user.put(KEY_REG_DATE, pref.getString(KEY_REG_DATE, null));
 
         // return user
         return user;

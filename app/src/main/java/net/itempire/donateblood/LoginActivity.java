@@ -297,11 +297,13 @@ public class LoginActivity extends AppCompatActivity
 //                }
 //            }
             if(!result.equals("null") && !result.equals("inactive") && !result.equals("Request Not found.")){
-                String full_name, gender, age, blood_group, contact_no, city, email, password, thanks;
+                String user_id, full_name, gender, age, blood_group, contact_no, city, email,
+                        password, thanks, last_donation_data, reg_date;
                 try {
                     JSONArray jsonArray = new JSONArray(result);
                     JSONObject userDetails = jsonArray.getJSONObject(0);
 
+                    user_id = userDetails.getString("user_id");
                     full_name = userDetails.getString("full_name");
                     gender = userDetails.getString("gender");
                     age = userDetails.getString("age");
@@ -311,7 +313,12 @@ public class LoginActivity extends AppCompatActivity
                     email = userDetails.getString("email");
                     password = userDetails.getString("password");
                     thanks = userDetails.getString("thanks");
-                    sessionManager.createLoginSession(full_name, gender, age, blood_group, contact_no, city, email, password, thanks);
+                    if(thanks.equals("")){
+                        thanks = "0";
+                    }
+                    last_donation_data = userDetails.getString("last_donation_data");
+                    reg_date = userDetails.getString("reg_date");
+                    sessionManager.createLoginSession(user_id, full_name, gender, age, blood_group, contact_no, city, email, password, thanks, last_donation_data, reg_date);
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     LoginActivity.this.finish();
@@ -320,6 +327,7 @@ public class LoginActivity extends AppCompatActivity
                 }
             }
             else{
+                Toast.makeText(LoginActivity.this, "Error in Login! Try again.", Toast.LENGTH_SHORT).show();
             }
 //            alertDialog.setMessage(result);
 //            alertDialog.show();

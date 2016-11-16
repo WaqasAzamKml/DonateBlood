@@ -319,11 +319,13 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
         protected void onPostExecute(String result) {
 
             if(!result.equals("exists") && !result.equals("Request Not found.")){
-                String full_name, gender, age, blood_group, contact_no, city, email, password, thanks;
+                String user_id, full_name, gender, age, blood_group, contact_no, city, email,
+                        password, thanks, last_donation_data, reg_date;
                 try {
                     JSONArray jsonArray = new JSONArray(result);
                     JSONObject userDetails = jsonArray.getJSONObject(0);
 
+                    user_id = userDetails.getString("user_id");
                     full_name = userDetails.getString("full_name");
                     gender = userDetails.getString("gender");
                     age = userDetails.getString("age");
@@ -333,7 +335,12 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
                     email = userDetails.getString("email");
                     password = userDetails.getString("password");
                     thanks = userDetails.getString("thanks");
-                    sessionManager.createLoginSession(full_name, gender, age, blood_group, contact_no, city, email, password, thanks);
+                    if(thanks.equals("")){
+                        thanks = "0";
+                    }
+                    last_donation_data = userDetails.getString("last_donation_data");
+                    reg_date = userDetails.getString("reg_date");
+                    sessionManager.createLoginSession(user_id, full_name, gender, age, blood_group, contact_no, city, email, password, thanks, last_donation_data, reg_date);
                     Toast.makeText(SignupActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);

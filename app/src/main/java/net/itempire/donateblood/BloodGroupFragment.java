@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,9 +38,16 @@ public class BloodGroupFragment extends Fragment {
     android.app.FragmentManager fragmentManager;
     String extra_message = "";
     String user_id, req_blood_group, type;
+    ConnectivityManager cm;
+    NetworkInfo activeNetwork;
+    boolean isConnected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        cm = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
         sessionManager = new SessionManager(getActivity().getApplicationContext());
         if(!sessionManager.isLoggedIn()){
             sessionManager.checkLogin();
@@ -126,33 +135,39 @@ public class BloodGroupFragment extends Fragment {
         dialogBuilder.setMessage("Enter message below");
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                extra_message = edt.getText().toString();
-                if(btnView.equals(btnAPositive)){
-                    req_blood_group = btnAPositive.getText().toString();
+                if(isConnected) {
+                    extra_message = edt.getText().toString();
+                    if(btnView.equals(btnAPositive)){
+                        req_blood_group = btnAPositive.getText().toString();
+                    }
+                    else if(btnView.equals(btnANegative)){
+                        req_blood_group = btnANegative.getText().toString();
+                    }
+                    else if (btnView.equals(btnBPositive)){
+                        req_blood_group = btnBPositive.getText().toString();
+                    }
+                    else if (btnView.equals(btnBNegative)){
+                        req_blood_group = btnBNegative.getText().toString();
+                    }
+                    else if (btnView.equals(btnABPositive)){
+                        req_blood_group = btnABPositive.getText().toString();
+                    }
+                    else if (btnView.equals(btnABNegative)){
+                        req_blood_group = btnABNegative.getText().toString();
+                    }
+                    else if (btnView.equals(btnOPositive)){
+                        req_blood_group = btnOPositive.getText().toString();
+                    }
+                    else if (btnView.equals(btnONegative)){
+                        req_blood_group = btnONegative.getText().toString();
+                    }
+
+                    BackgroundWorker backgroundWorker = new BackgroundWorker(getActivity());
+                    backgroundWorker.execute(type, user_id, req_blood_group, extra_message);
                 }
-                else if(btnView.equals(btnANegative)){
-                    req_blood_group = btnANegative.getText().toString();
+                else{
+                    Toast.makeText(getActivity().getApplicationContext(), "Internet Connection Not Working", Toast.LENGTH_SHORT).show();
                 }
-                else if (btnView.equals(btnBPositive)){
-                    req_blood_group = btnBPositive.getText().toString();
-                }
-                else if (btnView.equals(btnBNegative)){
-                    req_blood_group = btnBNegative.getText().toString();
-                }
-                else if (btnView.equals(btnABPositive)){
-                    req_blood_group = btnABPositive.getText().toString();
-                }
-                else if (btnView.equals(btnABNegative)){
-                    req_blood_group = btnABNegative.getText().toString();
-                }
-                else if (btnView.equals(btnOPositive)){
-                    req_blood_group = btnOPositive.getText().toString();
-                }
-                else if (btnView.equals(btnONegative)){
-                    req_blood_group = btnONegative.getText().toString();
-                }
-                BackgroundWorker backgroundWorker = new BackgroundWorker(getActivity());
-                backgroundWorker.execute(type, user_id, req_blood_group, extra_message);
 
             }
         });

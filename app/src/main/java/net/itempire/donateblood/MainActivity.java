@@ -105,9 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentManager.popBackStack();
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new ProfileFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_request_donation) {
+            sessionManager.checkLogin();
             fragmentManager.popBackStack();
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new BloodGroupFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_volunteers_list) {
+            sessionManager.checkLogin();
             fragmentManager.popBackStack();
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new VolunteersListFragment()).addToBackStack(null).commit();
         } else if (id == R.id.nav_view_donation_requests) {

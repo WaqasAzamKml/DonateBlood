@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -47,6 +49,10 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
     Button btnLogin, btnSignup;
     SessionManager sessionManager;
 
+    ConnectivityManager cm;
+    NetworkInfo activeNetwork;
+    boolean isConnected;
+
     String[] genderArray    = {"Male","Female"};
     String[] bGroupArray    = {"A+ve","A-ve","B+ve","B-ve","AB+ve","AB-ve","O+ve","O-ve"};
     String[] cityArray      = {"Karachi","Lahore","Faisalabad","Rawalpindi","Rahimyar Khan"};
@@ -82,6 +88,10 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
 
         btnLogin            = (Button) findViewById(R.id.btnLogin);
         btnSignup           = (Button) findViewById(R.id.btnSignup);
+
+        cm = (ConnectivityManager)SignupActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         sessionManager = new SessionManager(getApplicationContext());
 
@@ -122,30 +132,33 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name             = etName.getText().toString();
-                String gender           = spnGender.getSelectedItem().toString();
-                String age              = etAge.getText().toString();
-                String bloodGroup       = spnBloodGroup.getSelectedItem().toString();
-                String phoneNumber      = etPhone.getText().toString();
-                String city             = spnCity.getSelectedItem().toString();
-                String email            = etEmail.getText().toString();
-                String password         = etPassword.getText().toString();
-                String repeatPassword   = etRepeatPassword.getText().toString();
-                String type             = "signup";
+                if(isConnected) {
+                    String name = etName.getText().toString();
+                    String gender = spnGender.getSelectedItem().toString();
+                    String age = etAge.getText().toString();
+                    String bloodGroup = spnBloodGroup.getSelectedItem().toString();
+                    String phoneNumber = etPhone.getText().toString();
+                    String city = spnCity.getSelectedItem().toString();
+                    String email = etEmail.getText().toString();
+                    String password = etPassword.getText().toString();
+                    String repeatPassword = etRepeatPassword.getText().toString();
+                    String type = "signup";
 
-                if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(age) && !TextUtils.isEmpty(phoneNumber)
-                        && !TextUtils.isEmpty(email)  && !TextUtils.isEmpty(password)  && !TextUtils.isEmpty(repeatPassword)){
-                    if(!password.equals(repeatPassword)){
-                        Toast.makeText(SignupActivity.this, "Passwords don't match!", Toast.LENGTH_SHORT).show();
-                        return;
+                    if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(age) && !TextUtils.isEmpty(phoneNumber)
+                            && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(repeatPassword)) {
+                        if (!password.equals(repeatPassword)) {
+                            Toast.makeText(SignupActivity.this, "Passwords don't match!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(SignupActivity.this);
+                        backgroundWorker.execute(type, name, gender, age, bloodGroup, phoneNumber, city, email, password);
+                    } else {
+                        Toast.makeText(SignupActivity.this, "Fill in all the fields.", Toast.LENGTH_SHORT).show();
                     }
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(SignupActivity.this);
-                    backgroundWorker.execute(type, name, gender, age, bloodGroup, phoneNumber, city, email, password);
                 }
                 else{
-                    Toast.makeText(SignupActivity.this, "Fill in all the fields.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, "Internet Connection Not Working", Toast.LENGTH_SHORT).show();
                 }
-
 
 
             }

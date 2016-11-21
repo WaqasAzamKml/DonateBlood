@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -43,6 +45,9 @@ public class LoginActivity extends AppCompatActivity
     TextView tvForgotPassword;
     Button btnSignup, btnLogin;
     SessionManager sessionManager;
+    ConnectivityManager cm;
+    NetworkInfo activeNetwork;
+    boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,10 @@ public class LoginActivity extends AppCompatActivity
         etPassword = (EditText) findViewById(R.id.etPassword);
         tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
 
+        cm = (ConnectivityManager)LoginActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
         sessionManager = new SessionManager(getApplicationContext());
 
         Typeface roboto_light = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Light.ttf" );
@@ -90,16 +99,20 @@ public class LoginActivity extends AppCompatActivity
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-                String type = "login";
+                if(isConnected) {
+                    String email = etEmail.getText().toString();
+                    String password = etPassword.getText().toString();
+                    String type = "login";
 
-                if(email.length()>0 && password.length()>0){
-                    BackgroundWorker backgroundWorker = new BackgroundWorker(LoginActivity.this);
-                    backgroundWorker.execute(type, email, password);
+                    if (email.length() > 0 && password.length() > 0) {
+                        BackgroundWorker backgroundWorker = new BackgroundWorker(LoginActivity.this);
+                        backgroundWorker.execute(type, email, password);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Please fill-in all fields!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
-                    Toast.makeText(LoginActivity.this, "Please fill-in all fields!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Internet Connection Not Working", Toast.LENGTH_SHORT).show();
                 }
             }
         });

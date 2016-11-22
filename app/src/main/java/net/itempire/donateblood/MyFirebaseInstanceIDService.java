@@ -16,7 +16,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d("DonateBloodToken", "Refreshed token: " + refreshedToken);
 
-        // TODO: Implement this method to send any registration to your app's servers.
+        // TODO: Implement this String refreshedToken = Firemethod to send any registration to your app's servers.
         // sendRegistrationToServer(refreshedToken);
     }
 }

@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +65,9 @@ public class LoginActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("DonateBloodToken", "Refreshed token: " + refreshedToken);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -106,7 +112,7 @@ public class LoginActivity extends AppCompatActivity
 
                     if (email.length() > 0 && password.length() > 0) {
                         BackgroundWorker backgroundWorker = new BackgroundWorker(LoginActivity.this);
-                        backgroundWorker.execute(type, email, password);
+                        backgroundWorker.execute(type, email, password, refreshedToken);
                     } else {
                         Toast.makeText(LoginActivity.this, "Please fill-in all fields!", Toast.LENGTH_SHORT).show();
                     }
@@ -232,6 +238,7 @@ public class LoginActivity extends AppCompatActivity
             if(type.equals("login")){
                 String email = params[1];
                 String password = params[2];
+                String token = params[3];
                 try {
                     URL url = new URL(login_url+"m_loginactivity");
                     //URL url = new URL(login_url+"login.php");
@@ -247,7 +254,8 @@ public class LoginActivity extends AppCompatActivity
 
                     String post_data = URLEncoder.encode(type,"UTF-8")+"&"+
                             URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
-                            URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(password,"UTF-8");
+                            URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(password,"UTF-8")+"&"+
+                            URLEncoder.encode("token","UTF-8")+"="+URLEncoder.encode(token,"UTF-8");
 
                     bufferedWriter.write(post_data);
                     bufferedWriter.flush();

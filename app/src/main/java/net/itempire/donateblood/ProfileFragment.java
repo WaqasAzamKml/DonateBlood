@@ -1,10 +1,10 @@
 package net.itempire.donateblood;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +20,19 @@ import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
     SessionManager sessionManager;
-    TextView tvProfileName, tvThumbsCount, tvBloodGroup, tvContact, tvAddress;
+    TextView tvProfileName, tvThumbsCount, tvBloodGroup, tvContact, tvAddress, tvDrawerUsername, tvDrawerPhone;
     Button btnEditProfile;
+    NavigationView navigationView;
+    View headerView;
     //String name, thanks, bloodGroup, phone, city;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sessionManager = new SessionManager(getActivity().getApplicationContext());
+        navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
+        tvDrawerPhone = (TextView) headerView.findViewById(R.id.tvDrawerPhone);
+        tvDrawerUsername = (TextView) headerView.findViewById(R.id.tvDrawerUsername);
         super.onCreate(savedInstanceState);
     }
 
@@ -40,6 +41,10 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if(!sessionManager.isLoggedIn()){
+            String name = getString(R.string.txt_username);
+            String phone = getString(R.string.txt_phone);
+            tvDrawerPhone.setText(phone);
+            tvDrawerUsername.setText(name);
             sessionManager.checkLogin();
             return inflater.inflate(R.layout.fragment_donation_requests, container, false);
         }
@@ -78,13 +83,10 @@ public class ProfileFragment extends Fragment {
             tvBloodGroup.setText(bloodGroup);
             tvContact.setText(phone);
             tvAddress.setText(city);
+            tvDrawerUsername.setText(name);
+            tvDrawerPhone.setText(phone);
 
             return v;
         }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 }

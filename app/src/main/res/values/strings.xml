@@ -32,6 +32,8 @@
     <string name="txt_edit_profile">Edit Profile</string>
     <string name="txt_donate">Donate</string>
     <string name="txt_thanks">Thanks</string>
+    <string name="txt_username">User Name</string>
+    <string name="txt_phone">Phone Number</string>
 
     <string name="temp_profile_name">Muhammad Hashim</string>
     <string name="temp_name">Hashim</string>

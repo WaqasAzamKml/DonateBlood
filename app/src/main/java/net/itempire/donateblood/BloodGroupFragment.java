@@ -8,11 +8,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -41,6 +43,22 @@ public class BloodGroupFragment extends Fragment {
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
     boolean isConnected;
+    TextView tvDrawerUsername, tvDrawerPhone;
+    NavigationView navigationView;
+    View headerView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        sessionManager = new SessionManager(getActivity().getApplicationContext());
+
+        navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
+
+        tvDrawerPhone = (TextView) headerView.findViewById(R.id.tvDrawerPhone);
+        tvDrawerUsername = (TextView) headerView.findViewById(R.id.tvDrawerUsername);
+
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +66,11 @@ public class BloodGroupFragment extends Fragment {
         activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        sessionManager = new SessionManager(getActivity().getApplicationContext());
         if(!sessionManager.isLoggedIn()){
+            String name = getString(R.string.txt_username);
+            String phone = getString(R.string.txt_phone);
+            tvDrawerPhone.setText(phone);
+            tvDrawerUsername.setText(name);
             sessionManager.checkLogin();
             return inflater.inflate(R.layout.fragment_donation_requests, container, false);
         }
@@ -69,6 +90,11 @@ public class BloodGroupFragment extends Fragment {
 
             HashMap<String, String> userDetails = sessionManager.getUserDetails();
             user_id = userDetails.get(SessionManager.KEY_USER_ID);
+            String name = userDetails.get(SessionManager.KEY_NAME);
+            String phone = userDetails.get(SessionManager.KEY_CONTACT_NUMBER);
+
+            tvDrawerUsername.setText(name);
+            tvDrawerPhone.setText(phone);
 
             btnAPositive.setOnClickListener(new View.OnClickListener() {
                 @Override

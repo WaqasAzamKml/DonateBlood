@@ -53,6 +53,10 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.8.0'
     compile 'com.google.firebase:firebase-messaging:9.8.0'
     testCompile 'junit:junit:4.12'
+
+    //Including AwesomeValidation
+    compile fileTree(dir: 'libs', include: ['awesomeValidation'])
+    compile 'com.basgeekball:awesome-validation:1.3'
 }
 
 

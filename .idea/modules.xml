@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DonateBlood.iml" filepath="$PROJECT_DIR$/DonateBlood.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/awesomeValidation/awesomeValidation.iml" filepath="$PROJECT_DIR$/libs/awesomeValidation/awesomeValidation.iml" />
       <module fileurl="file://$PROJECT_DIR$/libs/iconics/iconics.iml" filepath="$PROJECT_DIR$/libs/iconics/iconics.iml" />
       <module fileurl="file://$PROJECT_DIR$/libs/libs.iml" filepath="$PROJECT_DIR$/libs/libs.iml" />
     </modules>

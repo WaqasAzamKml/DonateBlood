@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.common.collect.Range;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +45,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
+
 public class SignupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     EditText etName, etAge, etEmail, etPhone, etPassword, etRepeatPassword;
@@ -48,7 +55,7 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
     Spinner spnCity;
     Button btnLogin, btnSignup;
     SessionManager sessionManager;
-
+    AwesomeValidation awesomeValidation;
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
     boolean isConnected;
@@ -88,6 +95,15 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
 
         btnLogin            = (Button) findViewById(R.id.btnLogin);
         btnSignup           = (Button) findViewById(R.id.btnSignup);
+
+        awesomeValidation = new AwesomeValidation(BASIC);
+        String regexPassword = "^.{8,}$";
+        awesomeValidation.addValidation(etName,"[a-zA-Z\\s]+",getString(R.string.error_name));
+        awesomeValidation.addValidation(etAge, Range.closed(19,99),getString(R.string.error_age));
+        awesomeValidation.addValidation(etEmail, Patterns.EMAIL_ADDRESS,getString(R.string.error_email));
+        awesomeValidation.addValidation(etPhone, RegexTemplate.TELEPHONE,getString(R.string.error_phone));
+        awesomeValidation.addValidation(etPassword, regexPassword,getString(R.string.error_password));
+        //awesomeValidation.addValidation(etRepeatPassword,etPassword,getString(R.string.error_password));
 
         cm = (ConnectivityManager)SignupActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
@@ -133,6 +149,7 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 if(isConnected) {
+                    awesomeValidation.validate();
                     String name = etName.getText().toString();
                     String gender = spnGender.getSelectedItem().toString();
                     String age = etAge.getText().toString();

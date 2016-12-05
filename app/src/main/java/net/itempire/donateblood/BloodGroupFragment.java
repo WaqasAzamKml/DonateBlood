@@ -192,7 +192,7 @@ public class BloodGroupFragment extends Fragment {
                     backgroundWorker.execute(type, user_id, req_blood_group, extra_message);
                 }
                 else{
-                    Toast.makeText(getActivity().getApplicationContext(), "Internet Connection Not Working", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.error_internet), Toast.LENGTH_SHORT).show();
                 }
 
             }

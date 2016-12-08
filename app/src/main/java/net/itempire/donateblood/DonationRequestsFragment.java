@@ -1,31 +1,36 @@
 package net.itempire.donateblood;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MIRSAAB on 11/1/2016.
@@ -33,17 +38,67 @@ import java.util.HashMap;
 
 public class DonationRequestsFragment extends Fragment {
     SessionManager sessionManager;
-    TextView tvProfileName, tvThumbsCount, tvBloodGroup, tvContact, tvAddress, tvDrawerUsername, tvDrawerPhone;
-    Button btnEditProfile;
+    TextView tvDrawerUsername, tvDrawerPhone;
     NavigationView navigationView;
     View headerView;
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
     boolean isConnected;
+    RequestSharedPref requestSharedPref;
+    ListView requestsListView;
+    DonationRequestsAdapter adapter;
+    ArrayList<DonationRequests> donationRequestsList;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        HashMap<String, String> userDetails = sessionManager.getUserDetails();
+        String user_id = userDetails.get(SessionManager.KEY_USER_ID);
+        String email = userDetails.get(SessionManager.KEY_EMAIL);
+        String name = userDetails.get(SessionManager.KEY_NAME);
+        String phone = userDetails.get(SessionManager.KEY_CONTACT_NUMBER);
+        if(isConnected){
+            if(!sessionManager.isLoggedIn()){
+                name = getString(R.string.txt_username);
+                phone = getString(R.string.txt_phone);
+                tvDrawerPhone.setText(phone);
+                tvDrawerUsername.setText(name);
+
+            }
+            else {
+                tvDrawerUsername.setText(name);
+                tvDrawerPhone.setText(phone);
+                donationRequestsList = new ArrayList<DonationRequests>();
+                new JSONAsyncTask().execute("http://bloodapp.witorbit.net/index.php?display=m_request&check_user&user_id="+user_id+"&email="+email);
+                requestsListView = (ListView) getView().findViewById(R.id.lvRequestsList);
+                adapter = new DonationRequestsAdapter(getActivity(),R.layout.request_row,donationRequestsList);
+                requestsListView.setAdapter(adapter);
+
+            }
+        }
+        else{
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.error_internet), Toast.LENGTH_SHORT).show();
+            if(!sessionManager.isLoggedIn()){
+                name = getString(R.string.txt_username);
+                phone = getString(R.string.txt_phone);
+                tvDrawerPhone.setText(phone);
+                tvDrawerUsername.setText(name);
+                loadRequestsOffline();
+
+            }
+            else {
+                tvDrawerUsername.setText(name);
+                tvDrawerPhone.setText(phone);
+                loadRequestsOffline();
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sessionManager = new SessionManager(getActivity().getApplicationContext());
+        requestSharedPref = new RequestSharedPref(getActivity().getApplicationContext());
 
         navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
@@ -59,114 +114,124 @@ public class DonationRequestsFragment extends Fragment {
         activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         HashMap<String, String> userDetails = sessionManager.getUserDetails();
-        String user_id = userDetails.get(SessionManager.KEY_USER_ID);
-        String email = userDetails.get(SessionManager.KEY_EMAIL);
         String name = userDetails.get(SessionManager.KEY_NAME);
         String phone = userDetails.get(SessionManager.KEY_CONTACT_NUMBER);
 
-        if(isConnected){
-            BackgroundWorker backgroundWorker = new BackgroundWorker(getActivity());
-            backgroundWorker.execute(user_id,email);
-        }
-        if(!sessionManager.isLoggedIn()){
-            name = getString(R.string.txt_username);
-            phone = getString(R.string.txt_phone);
-            tvDrawerPhone.setText(phone);
-            tvDrawerUsername.setText(name);
 
-            return inflater.inflate(R.layout.fragment_donation_requests, container, false);
-        }
-        else {
-            tvDrawerUsername.setText(name);
-            tvDrawerPhone.setText(phone);
-
-            return inflater.inflate(R.layout.fragment_donation_requests, container, false);
-        }
+        return inflater.inflate(R.layout.fragment_donation_requests, container, false);
     }
 
     /*******
      * Inner BackgroundWorker Class
      *******/
+    class JSONAsyncTask extends AsyncTask<String, Void, Boolean> {
 
-    class BackgroundWorker extends AsyncTask<String,Void,String> {
-        Context context;
-        AlertDialog alertDialog;
-        BackgroundWorker(Context context){
-            this.context = context;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            //String type = params[0];
-            //String login_url = "http://192.168.8.105/android/";
-            //String login_url = "http://172.18.15.82/android/";
-            //String login_url = "http://waqasazam.com/android/";
-            //String login_url = "http://10.1.1.10/bloodapp/index.php?display=";
-            String login_url = "http://bloodapp.witorbit.net/index.php?display=";
-            String user_id = params[0];
-            String email = params[1];
-            if(user_id != null){
-                try {
-                    URL url = new URL(login_url+"m_request&check_user");
-                    //URL url = new URL(login_url+"login.php");
-
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.setDoOutput(true);
-                    httpURLConnection.setDoInput(true);
-
-                    OutputStream outputStream = httpURLConnection.getOutputStream();
-
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-
-                    String post_data = URLEncoder.encode("user_id","UTF-8")+"="+URLEncoder.encode(user_id,"UTF-8")+"&"+
-                            URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8");
-
-                    bufferedWriter.write(post_data);
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
-                    outputStream.close();
-
-                    InputStream inputStream = httpURLConnection.getInputStream();
-
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-
-                    String result = "";
-                    String line = "";
-                    while((line = bufferedReader.readLine())!=null){
-                        result += line;
-                    }
-
-                    bufferedReader.close();
-                    inputStream.close();
-                    httpURLConnection.disconnect();
-
-                    return result;
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
+        ProgressDialog dialog;
 
         @Override
         protected void onPreExecute() {
-            alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setTitle("Request Status");
+            super.onPreExecute();
+            dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Loading, please wait");
+            dialog.setTitle("Connecting server");
+            dialog.show();
+            dialog.setCancelable(false);
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            alertDialog.setMessage(result);
-            alertDialog.show();
+        protected Boolean doInBackground(String... urls) {
+            try {
+                String request_id, user_id, blood_group, request_status, detail, date_time, city;
+                //------------------>>
+                HttpGet httpGet = new HttpGet(urls[0]);
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = httpClient.execute(httpGet);
+
+                // StatusLine stat = response.getStatusLine();
+                int status = response.getStatusLine().getStatusCode();
+
+                if (status == 200) {
+                    HttpEntity entity = response.getEntity();
+                    String data = EntityUtils.toString(entity);
+
+                    JSONArray jsonArray = new JSONArray(data);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        storeRequests(object);
+//                        request_id = object.getString("request_id");
+//                        user_id = object.getString("user_id");
+//                        blood_group = object.getString("blood_group");
+//                        request_status = object.getString("status");
+//                        detail = object.getString("detail");
+//                        date_time = object.getString("date_time");
+//                        //city = object.getString("city");
+                        city = "Karachi";
+
+                        //requestSharedPref.storeRequest(request_id,user_id,blood_group,request_status,detail,date_time,city);
+
+                        DonationRequests request = new DonationRequests();
+
+                        request.setRequestBloodGroup(object.getString("blood_group"));
+                        request.setRequestDate(object.getString("date_time"));
+                        request.setRequestCity(city);
+                        Log.d("LoopNumber",""+i);
+                        donationRequestsList.add(request);
+                    }
+                    Log.d("Result","True");
+                    return true;
+                }
+
+                //------------------>>
+
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.d("Result","False");
+            return false;
         }
 
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
+        protected void onPostExecute(Boolean result) {
+            dialog.cancel();
+            adapter.notifyDataSetChanged();
+            if(result == false)
+                Toast.makeText(getActivity().getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
+
         }
+    }
+
+    public void storeRequests(JSONObject object){
+        String request_id, user_id, blood_group, request_status, detail, date_time, city;
+        try {
+            request_id = object.getString("request_id");
+            user_id = object.getString("user_id");
+            blood_group = object.getString("blood_group");
+            request_status = object.getString("status");
+            detail = object.getString("detail");
+            date_time = object.getString("date_time");
+            //city = object.getString("city");
+            city = "Karachi";
+            requestSharedPref.storeRequest(request_id,user_id,blood_group,request_status,detail,date_time,city);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public boolean loadRequestsOffline(){
+        Log.d("Test RequestSharedPref",requestSharedPref.toString());
+        if(!requestSharedPref.isNull()){
+            Map<String,?> requests = requestSharedPref.getAll();
+            for(Map.Entry<String,?> request : requests.entrySet()){
+                Log.d("Offline Requests",request.getKey() + ":" + request.getValue().toString());
+            }
+            return  true;
+        }
+        return false;
     }
 }

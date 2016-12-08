@@ -78,7 +78,12 @@
     <string name="error_email">Enter a valid email address</string>
     <string name="error_phone">Enter a valid phone number</string>
     <string name="error_password">Minimum 8 characters</string>
+    <string name="error_internet">Internet Connection Not Working</string>
 
-
+    <string name="id_singleDonationRequest">singleDonationRequest</string>
+    <string name="id_dr_bloodGroup">tvBloodGroup</string>
+    <string name="id_dr_date">tvDate</string>
+    <string name="id_dr_city">tvCity</string>
+    <string name="id_dr_icon">tvIcon</string>
 
 </resources>

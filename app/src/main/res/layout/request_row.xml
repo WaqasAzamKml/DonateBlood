@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/tvRequestBloodGroup"
+        android:text="@string/blood_bN"
+        android:textSize="17sp"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:id="@+id/tvRequestDate"
+        android:text="@string/temp_date"
+        android:textSize="17sp"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:id="@+id/tvRequestCity"
+        android:text="@string/temp_city"
+        android:textSize="17sp"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:id="@+id/tvRequestIcon"
+        android:text="{faw-eye}"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="17sp"
+        />
+</LinearLayout>

@@ -155,8 +155,8 @@ public class DonationRequestsFragment extends Fragment {
                     String data = EntityUtils.toString(entity);
 
                     JSONArray jsonArray = new JSONArray(data);
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
+                    int arraySize = jsonArray.length();
+                    for (int i = 0; i < arraySize; i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
                         storeRequests(object);
 //                        request_id = object.getString("request_id");
@@ -166,7 +166,6 @@ public class DonationRequestsFragment extends Fragment {
 //                        detail = object.getString("detail");
 //                        date_time = object.getString("date_time");
 //                        //city = object.getString("city");
-                        city = "Karachi";
 
                         //requestSharedPref.storeRequest(request_id,user_id,blood_group,request_status,detail,date_time,city);
 
@@ -174,7 +173,8 @@ public class DonationRequestsFragment extends Fragment {
 
                         request.setRequestBloodGroup(object.getString("blood_group"));
                         request.setRequestDate(object.getString("date_time"));
-                        request.setRequestCity(city);
+                        request.setRequestCity(object.getString("city"));
+                        //request.setRequestCity("Karachi");
                         Log.d("LoopNumber",""+i);
                         donationRequestsList.add(request);
                     }

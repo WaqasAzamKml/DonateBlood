@@ -12,8 +12,10 @@ import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ public class BloodGroupFragment extends Fragment {
     SessionManager sessionManager;
     Button btnAPositive, btnANegative, btnBPositive, btnBNegative,btnOPositive, btnONegative,btnABPositive, btnABNegative;
     android.app.FragmentManager fragmentManager;
-    String extra_message = "";
+    String required_city,extra_message = "";
     String user_id, req_blood_group, type;
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
@@ -46,6 +48,7 @@ public class BloodGroupFragment extends Fragment {
     TextView tvDrawerUsername, tvDrawerPhone;
     NavigationView navigationView;
     View headerView;
+    String[] cityArray      = {"Karachi","Lahore","Faisalabad","Rawalpindi","Rahimyar Khan"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,13 +159,16 @@ public class BloodGroupFragment extends Fragment {
         dialogBuilder.setView(dialogView);
         final View btnView = v;
         final EditText edt = (EditText) dialogView.findViewById(R.id.etMessage);
+        final Spinner spnCity = (Spinner) dialogView.findViewById(R.id.spnCity);
+        ArrayAdapter<String> spnCityAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.custom_dialog_spinner_item,cityArray);
+        spnCity.setAdapter(spnCityAdapter);
         type = "request";
         dialogBuilder.setTitle("Message");
-        dialogBuilder.setMessage("Enter message below");
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if(isConnected) {
                     extra_message = edt.getText().toString();
+                    required_city = spnCity.getSelectedItem().toString();
                     if(btnView.equals(btnAPositive)){
                         req_blood_group = btnAPositive.getText().toString();
                     }
@@ -189,7 +195,7 @@ public class BloodGroupFragment extends Fragment {
                     }
 
                     BackgroundWorker backgroundWorker = new BackgroundWorker(getActivity());
-                    backgroundWorker.execute(type, user_id, req_blood_group, extra_message);
+                    backgroundWorker.execute(type, user_id, req_blood_group, required_city, extra_message);
                 }
                 else{
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.error_internet), Toast.LENGTH_SHORT).show();
@@ -229,7 +235,8 @@ public class BloodGroupFragment extends Fragment {
             if(type.equals("request")){
                 String user_id = params[1];
                 String req_blood_group = params[2];
-                String extra_message = params[3];
+                String req_city = params[3];
+                String extra_message = params[4];
                 try {
                     URL url = new URL(login_url+"m_request");
                     //URL url = new URL(login_url+"login.php");
@@ -246,6 +253,7 @@ public class BloodGroupFragment extends Fragment {
                     String post_data = URLEncoder.encode(type,"UTF-8")+"&"+
                             URLEncoder.encode("user_id","UTF-8")+"="+URLEncoder.encode(user_id,"UTF-8")+"&"+
                             URLEncoder.encode("r_blood","UTF-8")+"="+URLEncoder.encode(req_blood_group,"UTF-8")+"&"+
+                            URLEncoder.encode("city","UTF-8")+"="+URLEncoder.encode(req_city,"UTF-8")+"&"+
                             URLEncoder.encode("message","UTF-8")+"="+URLEncoder.encode(extra_message,"UTF-8");
 
                     bufferedWriter.write(post_data);

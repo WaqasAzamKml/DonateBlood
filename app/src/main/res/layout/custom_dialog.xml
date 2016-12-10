@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCityHint"
+        android:textSize="18sp"
+        android:text="@string/custom_tv_city_hint"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spnCity" />
 
     <EditText
         android:id="@+id/etMessage"

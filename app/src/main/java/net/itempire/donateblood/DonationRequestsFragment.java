@@ -1,6 +1,7 @@
 package net.itempire.donateblood;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,18 @@ import java.util.Map;
  */
 
 public class DonationRequestsFragment extends Fragment {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     SessionManager sessionManager;
     TextView tvDrawerUsername, tvDrawerPhone;
     NavigationView navigationView;
@@ -48,11 +62,15 @@ public class DonationRequestsFragment extends Fragment {
     ListView requestsListView;
     DonationRequestsAdapter adapter;
     ArrayList<DonationRequests> donationRequestsList;
+    FragmentManager fragmentManager;
+    int[] request_ids = new int[15];
+    ProgressDialog dialog;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        fragmentManager = getFragmentManager();
         HashMap<String, String> userDetails = sessionManager.getUserDetails();
         String user_id = userDetails.get(SessionManager.KEY_USER_ID);
         String email = userDetails.get(SessionManager.KEY_EMAIL);
@@ -74,7 +92,16 @@ public class DonationRequestsFragment extends Fragment {
                 requestsListView = (ListView) getView().findViewById(R.id.lvRequestsList);
                 adapter = new DonationRequestsAdapter(getActivity(),R.layout.request_row,donationRequestsList);
                 requestsListView.setAdapter(adapter);
-
+                requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        RequestDetailsFragment fragment = new RequestDetailsFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("request_id",request_ids[position]);
+                        fragment.setArguments(bundle);
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).addToBackStack(null).commit();
+                    }
+                });
             }
         }
         else{
@@ -126,8 +153,6 @@ public class DonationRequestsFragment extends Fragment {
      *******/
     class JSONAsyncTask extends AsyncTask<String, Void, Boolean> {
 
-        ProgressDialog dialog;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -159,6 +184,7 @@ public class DonationRequestsFragment extends Fragment {
                     for (int i = 0; i < arraySize; i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
                         storeRequests(object);
+                        request_ids[i] = Integer.parseInt(object.getString("request_id"));
 //                        request_id = object.getString("request_id");
 //                        user_id = object.getString("user_id");
 //                        blood_group = object.getString("blood_group");

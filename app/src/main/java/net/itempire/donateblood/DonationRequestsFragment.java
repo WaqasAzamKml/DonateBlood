@@ -158,7 +158,6 @@ public class DonationRequestsFragment extends Fragment {
             super.onPreExecute();
             dialog = new ProgressDialog(getActivity());
             dialog.setMessage("Loading, please wait");
-            dialog.setTitle("Connecting server");
             dialog.show();
             dialog.setCancelable(false);
         }

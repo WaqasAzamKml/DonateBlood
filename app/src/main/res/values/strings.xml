@@ -30,6 +30,7 @@
     <string name="txt_login">Login</string>
     <string name="txt_signup">Signup</string>
     <string name="txt_edit_profile">Edit Profile</string>
+    <string name="txt_update_profile">Update Profile</string>
     <string name="txt_donate">Donate</string>
     <string name="txt_thanks">Thanks</string>
     <string name="txt_username">User Name</string>

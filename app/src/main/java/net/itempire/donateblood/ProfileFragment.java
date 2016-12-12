@@ -1,6 +1,7 @@
 package net.itempire.donateblood;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ public class ProfileFragment extends Fragment {
     Button btnEditProfile;
     NavigationView navigationView;
     View headerView;
+    FragmentManager fragmentManager;
     //String name, thanks, bloodGroup, phone, city;
 
     @Override
@@ -39,6 +41,7 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        fragmentManager = getFragmentManager();
 
         if(!sessionManager.isLoggedIn()){
             String name = getString(R.string.txt_username);
@@ -85,6 +88,13 @@ public class ProfileFragment extends Fragment {
             tvAddress.setText(city);
             tvDrawerUsername.setText(name);
             tvDrawerPhone.setText(phone);
+
+            btnEditProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new EditProfileFragment()).addToBackStack(null).commit();
+                }
+            });
 
             return v;
         }

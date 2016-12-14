@@ -147,6 +147,9 @@ public class FeaturedDonorsFragment extends Fragment {
                     for (int i = 0; i < arraySize; i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
                         donorName = object.getString("full_name");
+                        if (donorName == null || donorName.equals("")){
+                            donorName = "N/A";
+                        }
                         donorThanks = object.getString("thanks");
                         if(donorThanks == null || donorThanks.equals("")){
                             donorThanks = "0";

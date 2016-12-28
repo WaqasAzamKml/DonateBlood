@@ -26,9 +26,11 @@
     <string name="txt_donation_requests">Pending Donation Requests</string>
     <string name="txt_volunteers_list">List of Volunteers</string>
     <string name="txt_featured_donors">Featured Donors</string>
+    <string name="txt_user_password">Enter your password to update profile.</string>
 
     <string name="txt_login">Login</string>
     <string name="txt_signup">Signup</string>
+    <string name="txt_edit">Edit</string>
     <string name="txt_edit_profile">Edit Profile</string>
     <string name="txt_update_profile">Update Profile</string>
     <string name="txt_donate">Donate</string>
@@ -80,6 +82,7 @@
     <string name="error_email">Enter a valid email address</string>
     <string name="error_phone">Enter a valid phone number</string>
     <string name="error_password">Minimum 8 characters</string>
+    <string name="error_repeat_password">Passwords don\'t match. Try again!</string>
     <string name="error_internet">Internet Connection Not Working</string>
 
     <string name="id_singleDonationRequest">singleDonationRequest</string>

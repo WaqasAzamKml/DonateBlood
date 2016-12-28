@@ -13,50 +13,117 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <TableRow>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etName"
+                    android:hint="@string/hint_name"
+                    android:layout_weight="3"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditName"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spnGender"
+                    android:layout_weight="3" />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditGender"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etAge"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:hint="@string/hint_age"
+                    android:layout_weight="3" />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditAge"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spnBloodGroup"
+                    android:layout_weight="3" />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditBloodGroup"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etPhoneNumber"
+                    android:hint="@string/hint_phone"
+                    android:inputType="phone"
+                    android:layout_weight="3"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditPhoneNumber"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spnCity"
+                    android:layout_weight="3"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditCity"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
+            <TableRow>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etEmail"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    android:layout_weight="3"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEditEmail"
+                    android:text="@string/txt_edit"
+                    android:layout_weight="1"/>
+            </TableRow>
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/etName"
-                android:hint="@string/hint_name"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spnGender">
-            </Spinner>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/etAge"
-                android:maxLength="2"
-                android:hint="@string/hint_age">
-            </EditText>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spnBloodGroup">
-            </Spinner>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/etPhoneNumber"
-                android:hint="@string/hint_phone"
-                android:inputType="phone"/>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spnCity">
-            </Spinner>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/etEmail"
-                android:hint="@string/hint_email"
-                android:inputType="textEmailAddress"/>
+                android:id="@+id/tvPassword"
+                android:layout_marginTop="10dp"
+                android:text="@string/txt_user_password"
+                android:textSize="18sp"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,6 +138,6 @@
                 android:text="@string/txt_update_profile"
                 android:layout_marginBottom="16dp"
                 android:textColor="#fff"/>
-        </LinearLayout>
+        </TableLayout>
     </ScrollView>
 </RelativeLayout>

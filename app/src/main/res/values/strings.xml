@@ -24,6 +24,7 @@
     <string name="txt_donation_completed">Donation Completed? Thank the person.</string>
     <string name="txt_required_blood">Required Blood Group ?</string>
     <string name="txt_donation_requests">Pending Donation Requests</string>
+    <string name="txt_my_requests">My Donation Requests</string>
     <string name="txt_volunteers_list">List of Volunteers</string>
     <string name="txt_featured_donors">Featured Donors</string>
     <string name="txt_user_password">Enter your password to update profile.</string>
@@ -69,6 +70,7 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_request_donation">Request Donation</string>
     <string name="nav_volunteers_list">Volunteers List</string>
+    <string name="nav_my_requests">My Requests</string>
     <string name="nav_view_requests">View Requests</string>
     <string name="nav_featured_donors">Featured Donors</string>
     <string name="nav_blood_banks">Blood Banks</string>

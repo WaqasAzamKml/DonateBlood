@@ -32,12 +32,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['iconics'])
     // Including Iconics fonts
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
 
     //Including AwesomeValidation
     compile fileTree(dir: 'libs', include: ['awesomeValidation'])
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
@@ -58,6 +58,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.basgeekball:awesome-validation:1.3'
 }
+
 
 
 

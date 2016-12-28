@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/nav_request_donation" />
         <item
-            android:id="@+id/nav_volunteers_list"
+            android:id="@+id/nav_my_requests"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/nav_volunteers_list" />
+            android:title="@string/nav_my_requests" />
         <item
             android:id="@+id/nav_view_donation_requests"
             android:icon="@drawable/ic_menu_slideshow"

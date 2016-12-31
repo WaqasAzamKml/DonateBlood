@@ -65,6 +65,7 @@ public class DonationRequestsFragment extends Fragment {
     FragmentManager fragmentManager;
     int[] request_ids = new int[15];
     ProgressDialog dialog;
+    String my_user_id;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class DonationRequestsFragment extends Fragment {
         fragmentManager = getFragmentManager();
         HashMap<String, String> userDetails = sessionManager.getUserDetails();
         String user_id = userDetails.get(SessionManager.KEY_USER_ID);
+        my_user_id = userDetails.get(SessionManager.KEY_USER_ID);
         String email = userDetails.get(SessionManager.KEY_EMAIL);
         String name = userDetails.get(SessionManager.KEY_NAME);
         String phone = userDetails.get(SessionManager.KEY_CONTACT_NUMBER);
@@ -140,9 +142,7 @@ public class DonationRequestsFragment extends Fragment {
         cm = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        HashMap<String, String> userDetails = sessionManager.getUserDetails();
-        String name = userDetails.get(SessionManager.KEY_NAME);
-        String phone = userDetails.get(SessionManager.KEY_CONTACT_NUMBER);
+
 
 
         return inflater.inflate(R.layout.fragment_donation_requests, container, false);
@@ -177,13 +177,19 @@ public class DonationRequestsFragment extends Fragment {
                 if (status == 200) {
                     HttpEntity entity = response.getEntity();
                     String data = EntityUtils.toString(entity);
-
+                    int indexer = 0;
                     JSONArray jsonArray = new JSONArray(data);
                     int arraySize = jsonArray.length();
                     for (int i = 0; i < arraySize; i++) {
                         JSONObject object = jsonArray.getJSONObject(i);
+                        if(my_user_id.equals(object.getString("fk_user_id")))
+                            continue;
+                        else{
+                            request_ids[indexer] = Integer.parseInt(object.getString("request_id"));
+                            indexer++;
+                        }
                         storeRequests(object);
-                        request_ids[i] = Integer.parseInt(object.getString("request_id"));
+
 //                        request_id = object.getString("request_id");
 //                        user_id = object.getString("user_id");
 //                        blood_group = object.getString("blood_group");

@@ -131,9 +131,51 @@
 
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvHeadingVolunteers"
+        android:layout_below="@id/layoutProfile"
+        android:text="@string/txt_volunteers_list"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryText"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutHeading"
+        android:layout_below="@id/tvHeadingVolunteers"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvHeadingName"
+            android:layout_weight="1"
+            android:text="@string/heading_name"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvHeadingAge"
+            android:layout_weight="1"
+            android:text="@string/heading_age"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvHeadingCity"
+            android:layout_weight="1"
+            android:text="@string/heading_city"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="17sp"/>
+    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lvDonorsList"
-        android:layout_below="@id/layoutProfile"/>
+        tools:listitem="@layout/featured_donor_row"
+        android:layout_below="@id/layoutHeading"/>
 </RelativeLayout>

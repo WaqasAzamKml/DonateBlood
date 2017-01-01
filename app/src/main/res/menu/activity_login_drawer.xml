@@ -24,17 +24,4 @@
             android:title="@string/nav_featured_donors" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_blood_banks"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/nav_blood_banks" />
-            <item
-                android:id="@+id/nav_emergency_numbers"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/nav_emergency_numbers" />
-        </menu>
-    </item>
-
 </menu>

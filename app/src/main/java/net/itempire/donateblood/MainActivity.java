@@ -118,10 +118,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_featured_donors) {
             fragmentManager.popBackStack();
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer,new FeaturedDonorsFragment()).addToBackStack(null).commit();
-        } else if (id == R.id.nav_blood_banks) {
-
-        } else if (id == R.id.nav_emergency_numbers) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

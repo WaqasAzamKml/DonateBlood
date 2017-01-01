@@ -134,7 +134,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnEditProfile"
+        android:id="@+id/btnDonate"
         android:text="@string/txt_donate"
         android:background="@color/colorPrimaryDark"
         android:textColor="#fff"

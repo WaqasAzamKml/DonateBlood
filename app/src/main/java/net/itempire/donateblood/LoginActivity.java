@@ -1,6 +1,7 @@
 package net.itempire.donateblood;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
     boolean isConnected;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +218,18 @@ public class LoginActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /*******
      * Inner BackgroundWorker Class
      *******/
@@ -291,6 +305,10 @@ public class LoginActivity extends AppCompatActivity
         protected void onPreExecute() {
 //            alertDialog = new AlertDialog.Builder(context).create();
 //            alertDialog.setTitle("Login Status");
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("Loading, please wait");
+            dialog.show();
+            dialog.setCancelable(false);
         }
 
         @Override
@@ -350,6 +368,7 @@ public class LoginActivity extends AppCompatActivity
             else{
                 Toast.makeText(LoginActivity.this, "Error in Login! Try again.", Toast.LENGTH_SHORT).show();
             }
+            dialog.cancel();
 //            alertDialog.setMessage(result);
 //            alertDialog.show();
         }

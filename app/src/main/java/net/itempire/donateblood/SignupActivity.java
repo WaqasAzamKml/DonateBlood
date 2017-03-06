@@ -1,6 +1,7 @@
 package net.itempire.donateblood;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -59,6 +60,7 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
     ConnectivityManager cm;
     NetworkInfo activeNetwork;
     boolean isConnected;
+    ProgressDialog dialog;
 
     String[] genderArray    = {"Male","Female"};
     String[] bGroupArray    = {"A+ve","A-ve","B+ve","B-ve","AB+ve","AB-ve","O+ve","O-ve"};
@@ -244,6 +246,18 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /*******
      * Inner BackgroundWorker Class
@@ -342,6 +356,10 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
         protected void onPreExecute() {
 //            alertDialog = new AlertDialog.Builder(context).create();
 //            alertDialog.setTitle("Status");
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("Loading, please wait");
+            dialog.show();
+            dialog.setCancelable(false);
 
         }
 
@@ -385,6 +403,7 @@ public class SignupActivity extends AppCompatActivity implements NavigationView.
             else{
                 Toast.makeText(SignupActivity.this, "Wrong Credentials. Try Again", Toast.LENGTH_SHORT).show();
             }
+            dialog.cancel();
 //            alertDialog.setMessage(result);
 //            alertDialog.show();
         }
